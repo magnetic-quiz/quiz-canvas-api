@@ -4,29 +4,28 @@ const QuizSchema = new Schema(
   {
     title: { type: String, required: true },
     description: { type: String },
-    creatorId: {
-      type: String,
-      ref: "User",
-      required: true,
-    },
     questions: [
       {
         questionText: { type: String, required: true },
-        questionType: {
-          type: String,
-          enum: ["text", "multiple_choice", "opinion_scale"],
-          required: true,
-        },
-        options: [String],
-        required: { type: Boolean, default: true },
+        options: [
+          {
+            text: { type: String, required: true },
+          },
+        ],
       },
     ],
-    globalSettings: {
-      primaryColor: String,
-      logoUrl: String,
-      introMessage: { type: String },
-      completionMessage: { type: String },
-    },
+    welcomePage: [
+      {
+        headline: { type: String, required: true },
+        description: { type: String, required: true },
+      },
+    ],
+    resultPage: [
+      {
+        headline: { type: String, required: true },
+        description: { type: String, required: true },
+      },
+    ],
     isPublished: { type: Boolean, default: false },
     publishedUrl: { type: String },
   },
