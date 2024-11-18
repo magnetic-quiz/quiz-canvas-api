@@ -4,6 +4,11 @@ const QuizSchema = new Schema(
   {
     title: { type: String, required: true },
     description: { type: String },
+    quizType: {
+      type: String,
+      enum: ["personality", "productRecommendation", "assessment"],
+      required: true,
+    },
     questions: [
       {
         questionText: { type: String, required: true },
@@ -11,13 +16,14 @@ const QuizSchema = new Schema(
         options: [
           {
             text: { type: String, required: true },
+            points: { type: Number, default: 0 },
           },
         ],
       },
     ],
     outcomes: [
       {
-        title: { type: String, required: true },
+        title: { type: String },
         description: { type: String },
       },
     ],
@@ -26,15 +32,13 @@ const QuizSchema = new Schema(
         questionID: {
           type: Schema.Types.ObjectId,
           ref: "Question",
-          required: true,
         }, // Refers to a question in the quiz
         optionOutcomes: [
           {
-            optionID: { type: Schema.Types.ObjectId, required: true }, // Refers to the specific option for a question
+            optionID: { type: Schema.Types.ObjectId }, // Refers to the specific option for a question
             outcomeID: {
               type: Schema.Types.ObjectId,
               ref: "Outcome",
-              required: true,
             }, // Refers to the outcome mapped to this option
           },
         ],
@@ -52,8 +56,7 @@ const QuizSchema = new Schema(
         description: { type: String, required: true },
       },
     ],
-    isPublished: { type: Boolean, default: false },
-    publishedUrl: { type: String },
+    status: { type: String, enum: ["draft", "published"], default: "draft" },
   },
   { timestamps: true }
 );
