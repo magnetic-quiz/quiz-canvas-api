@@ -11,7 +11,7 @@ import {
 router.get("/", getAllQuizzes);
 router.get("/:id", getQuiz);
 router.post("/", createQuiz);
-router.put("/:id", updateQuiz);
+router.put("/:quizID", updateQuiz);
 router.delete("/:id", deleteQuiz);
 
 export default router;

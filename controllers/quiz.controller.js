@@ -12,9 +12,20 @@ export const getAllQuizzes = async (req, res) => {
 export const getQuiz = async (req, res) => {
   try {
     const { id } = req.params;
-    const quiz = await Quiz.findById(id);
-    res.status(200).json(quiz);
+
+    // Fetch both published and draft quizzes with the same quizID
+    const quizzes = await Quiz.find({ quizID: id }).sort({ updatedAt: -1 });
+
+    if (!quizzes.length) {
+      return res.status(404).json({ message: "Quiz not found" });
+    }
+
+    // Return the latest draft if available; otherwise, return the published quiz
+    const latestQuiz =
+      quizzes.find((quiz) => quiz.status === "draft") || quizzes[0];
+    res.status(200).json(latestQuiz);
   } catch (error) {
+    console.error("Error fetching quiz:", error);
     res.status(500).json({ message: error.message });
   }
 };
@@ -30,14 +41,73 @@ export const createQuiz = async (req, res) => {
 
 export const updateQuiz = async (req, res) => {
   try {
-    const { id } = req.params;
-    const quiz = await Quiz.findByIdAndUpdate(id, req.body);
-    if (!quiz) {
-      console.log("Quiz not found");
+    const { quizID } = req.params;
+
+    // Log the quizID for debugging
+    console.log("quizID:", quizID);
+
+    // Find the existing draft and published quizzes
+    const draftQuiz = await Quiz.findOne({ quizID, status: "draft" });
+    const publishedQuiz = await Quiz.findOne({ quizID, status: "published" });
+
+    // Sanitize the request payload
+    const sanitizedPayload = { ...req.body };
+    delete sanitizedPayload._id; // Remove `_id` to prevent errors
+    delete sanitizedPayload.createdAt; // Ensure timestamps are not overwritten
+    delete sanitizedPayload.updatedAt; // Ensure timestamps are not overwritten
+
+    // Handle draft updates
+    if (req.body.status === "draft") {
+      if (draftQuiz) {
+        // Update the existing draft
+        const updatedDraft = await Quiz.findByIdAndUpdate(
+          draftQuiz._id,
+          sanitizedPayload,
+          { new: true } // Return the updated document
+        );
+        return res.status(200).json(updatedDraft);
+      }
+
+      if (publishedQuiz) {
+        // Create a new draft based on the published quiz if no draft exists
+        const newDraft = await Quiz.create({
+          ...publishedQuiz.toObject(), // Copy all fields from the published quiz
+          ...sanitizedPayload, // Apply updates from the request
+          status: "draft", // Set the status to draft
+          _id: undefined, // Remove `_id` to ensure a new one is generated
+        });
+
+        return res.status(200).json(newDraft);
+      }
     }
-    const updatedQuiz = await Quiz.findById(id);
-    res.status(200).json(updatedQuiz);
+
+    // Handle publish updates
+    if (req.body.status === "published") {
+      if (publishedQuiz) {
+        // Update the published quiz directly
+        const updatedPublished = await Quiz.findByIdAndUpdate(
+          publishedQuiz._id,
+          sanitizedPayload,
+          { new: true } // Return the updated document
+        );
+        return res.status(200).json(updatedPublished);
+      }
+
+      if (draftQuiz) {
+        // Promote the draft to published
+        const updatedPublished = await Quiz.findByIdAndUpdate(
+          draftQuiz._id,
+          { ...sanitizedPayload, status: "published" }, // Change status to published
+          { new: true } // Return the updated document
+        );
+        return res.status(200).json(updatedPublished);
+      }
+    }
+
+    // If no matching quiz found
+    return res.status(404).json({ message: "Quiz not found" });
   } catch (error) {
+    console.error("Error updating quiz:", error);
     res.status(500).json({ message: error.message });
   }
 };

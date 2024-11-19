@@ -2,6 +2,7 @@ import { Schema, model } from "mongoose";
 
 const QuizSchema = new Schema(
   {
+    quizID: { type: String, required: true, unique: true }, // Store UUID
     title: { type: String, required: true },
     description: { type: String },
     quizType: {
