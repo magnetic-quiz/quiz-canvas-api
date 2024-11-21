@@ -2,19 +2,52 @@ import { Quiz } from "../models/quiz.model.js";
 
 export const getAllQuizzes = async (req, res) => {
   try {
-    const quizzes = await Quiz.find({});
+    const quizzes = await Quiz.aggregate([
+      {
+        $sort: { updatedAt: -1 }, // Sort by most recent update first
+      },
+      {
+        $group: {
+          _id: "$quizID", // Group by quizID
+          quiz: { $first: "$$ROOT" }, // Select the most recent document in each group
+        },
+      },
+      {
+        $replaceRoot: { newRoot: "$quiz" }, // Replace the root with the selected quiz
+      },
+    ]);
+
     res.status(200).json(quizzes);
   } catch (error) {
+    console.error("Error fetching quizzes:", error);
+    res.status(500).json({ message: error.message });
+  }
+};
+
+export const playQuiz = async (req, res) => {
+  try {
+    const { quizID } = req.params;
+
+    // Find the quiz with the "published" status for the given quizID
+    const publishedQuiz = await Quiz.findOne({ quizID, status: "published" });
+
+    if (!publishedQuiz) {
+      return res.status(404).json({ message: "Published quiz not found" });
+    }
+
+    res.status(200).json(publishedQuiz);
+  } catch (error) {
+    console.error("Error fetching published quiz:", error);
     res.status(500).json({ message: error.message });
   }
 };
 
 export const getQuiz = async (req, res) => {
   try {
-    const { id } = req.params;
+    const { quizID } = req.params;
 
     // Fetch both published and draft quizzes with the same quizID
-    const quizzes = await Quiz.find({ quizID: id }).sort({ updatedAt: -1 });
+    const quizzes = await Quiz.find({ quizID: quizID }).sort({ updatedAt: -1 });
 
     if (!quizzes.length) {
       return res.status(404).json({ message: "Quiz not found" });
