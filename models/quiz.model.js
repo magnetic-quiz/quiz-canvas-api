@@ -57,6 +57,19 @@ const QuizSchema = new Schema(
         description: { type: String, required: true },
       },
     ],
+    theme: {
+      themeType: { type: String },
+      placement: { type: String },
+      colors: {
+        question: { type: String },
+        answer: { type: String },
+        button: { type: String },
+        button_content: { type: String },
+        background: { type: String },
+      },
+      font_size: { type: String },
+      font: { type: String },
+    },
     status: { type: String, enum: ["draft", "published"], default: "draft" },
   },
   { timestamps: true }
