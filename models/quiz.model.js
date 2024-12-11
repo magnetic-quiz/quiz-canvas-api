@@ -14,6 +14,7 @@ const QuizSchema = new Schema(
       {
         questionText: { type: String, required: true },
         isMandatory: { type: Boolean },
+        image: { type: String },
         options: [
           {
             text: { type: String, required: true },
@@ -26,6 +27,9 @@ const QuizSchema = new Schema(
       {
         title: { type: String },
         description: { type: String },
+        image: { type: String },
+        ctaText: { type: String },
+        ctaButtonText: { type: String },
       },
     ],
     logic: [
@@ -49,6 +53,7 @@ const QuizSchema = new Schema(
       {
         headline: { type: String, required: true },
         description: { type: String, required: true },
+        image: { type: String },
       },
     ],
     resultPage: [
