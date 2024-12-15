@@ -13,6 +13,7 @@ const QuizSchema = new Schema(
     questions: [
       {
         questionText: { type: String, required: true },
+        description: { type: String },
         isMandatory: { type: Boolean },
         image: { type: String },
         options: [
@@ -28,7 +29,7 @@ const QuizSchema = new Schema(
         title: { type: String },
         description: { type: String },
         image: { type: String },
-        ctaText: { type: String },
+        ctaHeadline: { type: String },
         ctaButtonText: { type: String },
       },
     ],
@@ -75,6 +76,17 @@ const QuizSchema = new Schema(
       font_size: { type: String },
       font: { type: String },
     },
+    leadName: [
+      {
+        nameCallout: { type: String },
+      },
+    ],
+    leadEmail: [
+      {
+        emailCallout: { type: String },
+        Description: { type: String },
+      },
+    ],
     status: { type: String, enum: ["draft", "published"], default: "draft" },
   },
   { timestamps: true }
