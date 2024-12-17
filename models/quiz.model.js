@@ -15,7 +15,27 @@ const QuizSchema = new Schema(
         questionText: { type: String, required: true },
         description: { type: String },
         isMandatory: { type: Boolean },
+        isMultipleChoice: { type: Boolean },
         image: { type: String },
+        deskTopLayout: {
+          type: String,
+          enum: [
+            "imageBackground",
+            "textOnly",
+            "leftImage",
+            "rightImage",
+            "leftFullImage",
+            "rightFullImage",
+          ],
+          default: "rightImage",
+          required: true,
+        },
+        mobileLayout: {
+          type: String,
+          enum: ["imageBackground", "textOnly", "topImage"],
+          default: "topImage",
+          required: true,
+        },
         options: [
           {
             text: { type: String, required: true },
@@ -31,6 +51,8 @@ const QuizSchema = new Schema(
         image: { type: String },
         ctaHeadline: { type: String },
         ctaButtonText: { type: String },
+        isCTASectionVisbile: { type: Boolean },
+        isImageVisible: { type: Boolean },
       },
     ],
     logic: [
@@ -55,6 +77,26 @@ const QuizSchema = new Schema(
         headline: { type: String, required: true },
         description: { type: String, required: true },
         image: { type: String },
+        startButtonText: { type: String, required: true },
+        deskTopLayout: {
+          type: String,
+          enum: [
+            "imageBackground",
+            "textOnly",
+            "leftImage",
+            "rightImage",
+            "leftFullImage",
+            "rightFullImage",
+          ],
+          default: "rightImage",
+          required: true,
+        },
+        mobileLayout: {
+          type: String,
+          enum: ["imageBackground", "textOnly", "topImage"],
+          default: "topImage",
+          required: true,
+        },
       },
     ],
     resultPage: [
@@ -79,12 +121,52 @@ const QuizSchema = new Schema(
     leadName: [
       {
         nameCallout: { type: String },
+        image: { type: String },
+        deskTopLayout: {
+          type: String,
+          enum: [
+            "imageBackground",
+            "textOnly",
+            "leftImage",
+            "rightImage",
+            "leftFullImage",
+            "rightFullImage",
+          ],
+          default: "rightImage",
+          required: true,
+        },
+        mobileLayout: {
+          type: String,
+          enum: ["imageBackground", "textOnly", "topImage"],
+          default: "topImage",
+          required: true,
+        },
       },
     ],
     leadEmail: [
       {
         emailCallout: { type: String },
+        image: { type: String },
         Description: { type: String },
+        deskTopLayout: {
+          type: String,
+          enum: [
+            "imageBackground",
+            "textOnly",
+            "leftImage",
+            "rightImage",
+            "leftFullImage",
+            "rightFullImage",
+          ],
+          default: "rightImage",
+          required: true,
+        },
+        mobileLayout: {
+          type: String,
+          enum: ["imageBackground", "textOnly", "topImage"],
+          default: "topImage",
+          required: true,
+        },
       },
     ],
     status: { type: String, enum: ["draft", "published"], default: "draft" },
