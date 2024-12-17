@@ -121,6 +121,7 @@ const QuizSchema = new Schema(
     leadName: [
       {
         nameCallout: { type: String },
+        isMandatory: { type: Boolean },
         image: { type: String },
         deskTopLayout: {
           type: String,
@@ -146,6 +147,7 @@ const QuizSchema = new Schema(
     leadEmail: [
       {
         emailCallout: { type: String },
+        isMandatory: { type: Boolean },
         image: { type: String },
         Description: { type: String },
         deskTopLayout: {
