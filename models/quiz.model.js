@@ -53,6 +53,9 @@ const QuizSchema = new Schema(
         ctaButtonText: { type: String },
         isCTASectionVisbile: { type: Boolean },
         isImageVisible: { type: Boolean },
+        bioTitle: { type: String },
+        bioDescription: { type: String },
+        bioImage: { type: String },
       },
     ],
     logic: [
@@ -78,6 +81,7 @@ const QuizSchema = new Schema(
         description: { type: String, required: true },
         image: { type: String },
         startButtonText: { type: String, required: true },
+        enableLeadGen: { type: String },
         deskTopLayout: {
           type: String,
           enum: [
