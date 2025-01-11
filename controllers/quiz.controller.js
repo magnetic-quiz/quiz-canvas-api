@@ -81,6 +81,49 @@ export const getQuiz = async (req, res) => {
   }
 };
 
+export const getMultipleQuizzes = async (req, res) => {
+  try {
+    const { quizIDs } = req.body; // Assuming quizIDs are sent in the request body as an array
+
+    if (!Array.isArray(quizIDs) || quizIDs.length === 0) {
+      return res
+        .status(400)
+        .json({ message: "quizIDs must be a non-empty array" });
+    }
+
+    // Fetch quizzes for all quizIDs
+    const quizzes = await Quiz.find({ quizID: { $in: quizIDs } }).sort({
+      updatedAt: -1,
+    });
+
+    if (!quizzes.length) {
+      return res.status(404).json({ message: "No quizzes found" });
+    }
+
+    // Map through quizIDs to ensure order matches the input array
+    const result = quizIDs.map((id) => {
+      // Filter quizzes for the current quizID
+      const relatedQuizzes = quizzes.filter((quiz) => quiz.quizID === id);
+
+      if (relatedQuizzes.length === 0) {
+        return { quizID: id, message: "Quiz not found" }; // Return not found for missing quizzes
+      }
+
+      // Return the latest draft if available; otherwise, return the published quiz
+      const latestQuiz =
+        relatedQuizzes.find((quiz) => quiz.status === "draft") ||
+        relatedQuizzes[0];
+
+      return latestQuiz;
+    });
+
+    res.status(200).json(result);
+  } catch (error) {
+    console.error("Error fetching quizzes:", error);
+    res.status(500).json({ message: error.message });
+  }
+};
+
 export const createQuiz = async (req, res) => {
   try {
     const quiz = await Quiz.create(req.body);
