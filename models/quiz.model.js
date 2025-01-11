@@ -177,6 +177,17 @@ const QuizSchema = new Schema(
       },
     ],
     status: { type: String, enum: ["draft", "published"], default: "draft" },
+    industry: {
+      type: String,
+      enum: [
+        "Health & Fitness",
+        "Beauty & Fashion",
+        "Relationships",
+        "Wellness",
+      ],
+    },
+    isTemplate: { type: Boolean },
+    coverImage: { type: String },
   },
   { timestamps: true }
 );

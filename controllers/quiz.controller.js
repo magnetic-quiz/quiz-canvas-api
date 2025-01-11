@@ -42,6 +42,24 @@ export const playQuiz = async (req, res) => {
   }
 };
 
+export const previewQuiz = async (req, res) => {
+  try {
+    const { quizID } = req.params;
+
+    // Find the quiz with the "draft" status for the given quizID
+    const draftQuiz = await Quiz.findOne({ quizID, status: "draft" });
+
+    if (!draftQuiz) {
+      return res.status(404).json({ message: "Draft quiz not found" });
+    }
+
+    res.status(200).json(draftQuiz);
+  } catch (error) {
+    console.error("Error fetching draft quiz:", error);
+    res.status(500).json({ message: error.message });
+  }
+};
+
 export const getQuiz = async (req, res) => {
   try {
     const { quizID } = req.params;
