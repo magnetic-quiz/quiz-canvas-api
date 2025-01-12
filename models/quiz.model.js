@@ -188,6 +188,7 @@ const QuizSchema = new Schema(
     },
     isTemplate: { type: Boolean },
     coverImage: { type: String },
+    adminID: { type: String },
   },
   { timestamps: true }
 );
