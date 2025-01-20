@@ -47,13 +47,25 @@ const QuizSchema = new Schema(
     outcomes: [
       {
         title: { type: String },
+        preTitle: { type: String },
         description: { type: String },
         image: { type: String },
+        heroBadge: { type: String },
+        summaryTitle: { type: String },
+        summary: [
+          {
+            title: { type: String },
+            description: { type: String },
+          },
+        ],
         ctaHeadline: { type: String },
+        ctaDescription: { type: String },
         ctaButtonText: { type: String },
         ctaButtonURL: { type: String },
         isCTASectionVisbile: { type: Boolean },
-        isAboutSectionVisible: { type: Boolean },
+        isBioSectionVisible: { type: Boolean },
+        bioLabel: { type: String },
+        bioName: { type: String },
         bioTitle: { type: String },
         bioDescription: { type: String },
         bioImage: { type: String },
@@ -122,6 +134,11 @@ const QuizSchema = new Schema(
       },
       font_size: { type: String },
       font: { type: String },
+      logo: {
+        image: { type: String },
+        isVisible: { type: Boolean },
+      },
+      accentColor: { type: String },
     },
     leadName: [
       {
