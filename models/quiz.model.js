@@ -15,7 +15,6 @@ const QuizSchema = new Schema(
         questionText: { type: String, required: true },
         description: { type: String },
         isMandatory: { type: Boolean },
-        isMultipleChoice: { type: Boolean },
         image: { type: String },
         deskTopLayout: {
           type: String,
@@ -46,7 +45,10 @@ const QuizSchema = new Schema(
     ],
     outcomes: [
       {
+        outcomeType: { type: String },
+        scoredPercentage: { type: Number },
         title: { type: String },
+        category: { type: String },
         preTitle: { type: String },
         description: { type: String },
         image: { type: String },
@@ -138,7 +140,6 @@ const QuizSchema = new Schema(
         image: { type: String },
         isVisible: { type: Boolean },
       },
-      accentColor: { type: String },
     },
     leadName: [
       {
