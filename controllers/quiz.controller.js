@@ -208,12 +208,19 @@ export const updateQuiz = async (req, res) => {
 
 export const deleteQuiz = async (req, res) => {
   try {
-    const { id } = req.params;
-    const quiz = await Quiz.findByIdAndDelete(id);
-    if (!quiz) {
-      res.status(404).json({ message: "quiz not found " });
+    const { quizID } = req.params; // Extract quizID from request parameters
+
+    const result = await Quiz.deleteMany({ quizID }); // Delete all matching documents
+
+    if (result.deletedCount === 0) {
+      return res
+        .status(404)
+        .json({ message: "No quizzes found with this quizID" });
     }
-    res.status(200).json({ message: "quiz deleted successfully" });
+
+    res
+      .status(200)
+      .json({ message: `Successfully deleted ${result.deletedCount} quizzes` });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

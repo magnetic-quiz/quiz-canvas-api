@@ -18,6 +18,6 @@ router.get("/previewQuiz/:quizID", previewQuiz);
 router.post("/getMultipleQuizzes", getMultipleQuizzes);
 router.post("/", createQuiz);
 router.put("/:quizID", updateQuiz);
-router.delete("/:id", deleteQuiz);
+router.delete("/:quizID", deleteQuiz);
 
 export default router;
