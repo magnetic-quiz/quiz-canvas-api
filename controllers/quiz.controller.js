@@ -24,6 +24,40 @@ export const getAllQuizzes = async (req, res) => {
   }
 };
 
+export const getAllQuizTemplates = async (req, res) => {
+  try {
+    const { quizType } = req.query; // Optionally filter templates by quizType
+    let query = { isTemplate: true }; //  Filter to get only templates
+
+    if (quizType) {
+      query.quizType = quizType; // Add quizType filter if provided
+    }
+
+    const templates = await Quiz.aggregate([
+      {
+        $match: query, // ADDED: Match only templates and optional quizType
+      },
+      {
+        $sort: { updatedAt: -1 }, // Sort by most recent update first
+      },
+      {
+        $group: {
+          _id: "$quizID", // Group by quizID
+          quiz: { $first: "$$ROOT" }, // Select the most recent document in each group
+        },
+      },
+      {
+        $replaceRoot: { newRoot: "$quiz" }, // Replace the root with the selected quiz
+      },
+    ]);
+
+    res.status(200).json(templates);
+  } catch (error) {
+    console.error("Error fetching quiz templates:", error);
+    res.status(500).json({ message: error.message });
+  }
+};
+
 export const playQuiz = async (req, res) => {
   try {
     const { quizID } = req.params;

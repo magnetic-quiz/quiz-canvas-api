@@ -9,9 +9,11 @@ import {
   playQuiz,
   previewQuiz,
   getMultipleQuizzes,
+  getAllQuizTemplates,
 } from "../controllers/quiz.controller.js";
 
 router.get("/", getAllQuizzes);
+router.get("/quiz-templates", getAllQuizTemplates);
 router.get("/:quizID", getQuiz);
 router.get("/playQuiz/:quizID", playQuiz);
 router.get("/previewQuiz/:quizID", previewQuiz);
