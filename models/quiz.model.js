@@ -66,13 +66,15 @@ const QuizSchema = new Schema(
         ctaButtonURL: { type: String },
         isCTASectionVisbile: { type: Boolean },
         isBioSectionVisible: { type: Boolean },
-        bioLabel: { type: String },
-        bioName: { type: String },
-        bioTitle: { type: String },
-        bioDescription: { type: String },
-        bioImage: { type: String },
       },
     ],
+    bioSection: {
+      bioLabel: { type: String },
+      bioName: { type: String },
+      bioTitle: { type: String },
+      bioDescription: { type: String },
+      bioImage: { type: String },
+    },
     logic: [
       {
         questionID: {
